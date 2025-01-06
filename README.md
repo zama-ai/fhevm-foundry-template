@@ -1,66 +1,28 @@
-## Foundry
+# fhevm-foundry-template
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This repo is a POC showing how to use fhevmjs functions inside Solidity Foundry scripts. There are two scripts that you can run on Sepolia test net, after setting up your `.env` file (please reuse same keys but different values than the ones given inside `.env.example` and install all npm packages):
+The fist one shows how NOT to use reencrypt in a script:
 
-Foundry consists of:
-
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
-
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
+```
+forge script script/MyConfidentialERC20Reencrypt.s.sol --rpc-url $SEPOLIA_RPC_URL --ffi --broadcast
 ```
 
-### Test
+This won't work as expected and will log a 0 for the minted balance by Alice instead of the corract value of 1000. This is unavoidable, since in FOundry FFI calls (and console logs) are always happening during the first simulation step, and will never happen during the real transaction broadcasting phase, so getting a 0 value is unavoidable, since the rrencrypt function from fhevmjs depends on the real onchain state of Sepolia, after the mint transaction has been validated. You can still get the correct reencrypted value after the script is done by running:
 
-```shell
-$ forge test
+```
+ts-node --transpile-only utils/reencrypt.ts [HANDLE] [PRIVATE_KEY] [CONTRACT_ADDRESS]
 ```
 
-### Format
+All of the [HANDLE], [PRIVATE_KEY] and [CONTRACT_ADDRESS] values will be correctly logged by the previously run script.
 
-```shell
-$ forge fmt
+On the other hand, we have a second script doing user encryption (using fhevmjs via FFI) + mint + transfer of a confidential erc20, this script runs as expected, because for encryption, contrarily to reencryption/decryption, data does NOT depend on the onchain Sepolia state. You can run it via:
+
+```
+forge script script/MyConfidentialERC20Encrypt.s.sol --rpc-url $SEPOLIA_RPC_URL --ffi --broadcast
 ```
 
-### Gas Snapshots
+And you can still check that Alice's and Bob's balances are correct after Alice transferred 42 encrypted tokens to Bob via:
 
-```shell
-$ forge snapshot
 ```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+ts-node --transpile-only utils/reencrypt.ts [HANDLE] [PRIVATE_KEY] [CONTRACT_ADDRESS]
 ```
