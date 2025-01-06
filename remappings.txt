@@ -1,0 +1,4 @@
+forge-std/=lib/forge-std/src/
+fhevm/=node_modules/fhevm/
+fhevm-contracts/=node_modules/fhevm-contracts/
+@openzeppelin/=node_modules/@openzeppelin/
