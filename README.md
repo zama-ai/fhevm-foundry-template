@@ -1,28 +1,97 @@
-# fhevm-foundry-template
+# FHEVM Foundry Template
 
-This repo is a POC showing how to use fhevmjs functions inside Solidity Foundry scripts. There are two scripts that you can run on Sepolia test network, after setting up your `.env` file (please reuse same keys but different values than the ones given inside `.env.example` and install all npm packages):
-The fist one shows how NOT to use reencrypt in a script:
+A Foundry-based template for developing Fully Homomorphic Encryption (FHE) enabled Solidity smart contracts using the
+FHEVM protocol by Zama.
+
+## Quick Start
+
+For detailed instructions see:
+[FHEVM Foundry Quick Start Tutorial](https://docs.zama.ai/protocol/solidity-guides/getting-started/quick-start-tutorial)
+
+### Prerequisites
+
+- **Foundry**: [Installation guide](https://book.getfoundry.sh/getting-started/installation)
+
+### Installation
+
+1. **Install dependencies**
+
+   ```bash
+   forge soldeer install
+   ```
+
+2. **Compile and test**
+
+   ```bash
+   forge build
+   forge test -vvv
+   ```
+
+3. **Deploy to local network**
+
+   Start an Anvil node with the FHEVM host contracts deployed (requires [forge-fhevm](../forge-fhevm)):
+
+   ```bash
+   # From the forge-fhevm directory
+   ./deploy-local.sh
+   ```
+
+   Then deploy to the local network:
+
+   ```bash
+   forge script script/DeployFHECounter.s.sol --rpc-url http://localhost:8545 --broadcast
+   ```
+
+4. **Deploy to Sepolia Testnet**
+
+   ```bash
+   cp .env.example .env
+   # Edit .env with your deployer key and RPC URL
+
+   source .env
+   forge script script/DeployFHECounter.s.sol \
+       --rpc-url $RPC_URL \
+       --private-key $DEPLOYER_PRIVATE_KEY \
+       --broadcast --verify
+   ```
+
+## Project Structure
 
 ```
-forge script script/MyConfidentialERC20Reencrypt.s.sol --rpc-url $SEPOLIA_RPC_URL --ffi --broadcast
+fhevm-foundry-template/
+├── src/                 # Smart contract source files
+│   └── FHECounter.sol   # Example FHE counter contract
+├── test/                # Test files
+│   └── FHECounter.t.sol # Tests using forge-fhevm
+├── script/              # Deployment scripts
+│   └── DeployFHECounter.s.sol
+├── foundry.toml         # Foundry configuration
+└── remappings.txt       # Dependency remappings
 ```
 
-This script will run but it won't work "as expected" and will log a `0` for the minted balance by Alice instead of the correct value of `1000` which corresponds to the minted amount. This is unavoidable, since in Foundry FFI calls (and console logs) are always happening during the first simulation step, and will never happen during the real transaction broadcasting phase, so getting a 0 value is unavoidable, since the reencrypt function from fhevmjs depends on the real onchain state of Sepolia, after the mint transaction has been validated (see foundry team explanation [here](https://github.com/foundry-rs/foundry/issues/5776#issuecomment-1867287499)). You can still get the correct reencrypted value after the script is done by running:
+## Available Scripts
 
-```
-ts-node --transpile-only utils/reencrypt.ts [HANDLE] [PRIVATE_KEY] [CONTRACT_ADDRESS]
-```
+| Script                                     | Description              |
+| ------------------------------------------ | ------------------------ |
+| `forge build`                              | Compile all contracts    |
+| `forge test -vvv`                          | Run all tests            |
+| `forge test --match-test test_name -vvv`   | Run a single test        |
+| `forge fmt`                                | Format code              |
+| `forge fmt --check`                        | Check formatting         |
 
-All of the [HANDLE], [PRIVATE_KEY] and [CONTRACT_ADDRESS] values will be correctly logged by the previously run script.
+## Documentation
 
-On the other hand, we have a second script doing user input encryption (using fhevmjs via FFI) + mint + transfer of a confidential erc20, this script runs successfully as expected, because for encryption, contrarily to reencryption/decryption, data does NOT depend on the onchain Sepolia state. You can run it via:
+- [FHEVM Documentation](https://docs.zama.ai/fhevm)
+- [FHEVM Foundry Setup Guide](https://docs.zama.ai/protocol/solidity-guides/getting-started/setup)
+- [FHEVM Testing Guide](https://docs.zama.ai/protocol/solidity-guides/development-guide/foundry/write_test)
+- [forge-fhevm Documentation](../forge-fhevm/docs/)
 
-```
-forge script script/MyConfidentialERC20Encrypt.s.sol --rpc-url $SEPOLIA_RPC_URL --ffi --broadcast
-```
+## License
 
-And you can still check that Alice's and Bob's balances are correct after Alice transferred 42 encrypted tokens to Bob via:
+This project is licensed under the BSD-3-Clause-Clear License. See the [LICENSE](LICENSE) file for details.
 
-```
-ts-node --transpile-only utils/reencrypt.ts [HANDLE] [PRIVATE_KEY] [CONTRACT_ADDRESS]
-```
+## Support
+
+- **GitHub Issues**: [Report bugs or request features](https://github.com/zama-ai/fhevm/issues)
+- **Documentation**: [FHEVM Docs](https://docs.zama.ai)
+- **Community**: [Zama Discord](https://discord.gg/zama)
