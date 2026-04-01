@@ -2,16 +2,16 @@
 cache/
 out/
 
-# Ignores development broadcast logs
-!/broadcast
-/broadcast/*/31337/
-/broadcast/*/11155111/
-/broadcast/**/dry-run/
+# Dependencies
+dependencies/
+
+# Env
+.env
+.env.*
+
 
 # Docs
-docs/
+docs/book/
 
-# Dotenv file
-.env
-
-node_modules/
+# Misc
+.DS_Store
