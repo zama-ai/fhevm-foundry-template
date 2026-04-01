@@ -33,6 +33,12 @@ checksum = "87854223d14941d6fda3d78d900217e79e25755ea5bc48beca035766fa6a4e7e"
 integrity = "826fb621339dcee4261f848b283ec86364743d3c289d61f621747d95e315215a"
 
 [[dependencies]]
+name = "forge-fhevm"
+version = "eba2324"
+git = "https://github.com/zama-ai/forge-fhevm.git"
+rev = "eba232440117cf17e0f45be7a337b5dd64a50635"
+
+[[dependencies]]
 name = "forge-std"
 version = "1.14.0"
 url = "https://soldeer-revisions.s3.amazonaws.com/forge-std/1_14_0_05-01-2026_15:24:39_forge-std-1.14.zip"

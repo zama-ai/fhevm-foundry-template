@@ -2,7 +2,6 @@
 src = "src"
 out = "out"
 libs = ["dependencies"]
-allow_paths = ["../forge-fhevm"]
 test = "test"
 script = "script"
 solc = "0.8.27"
@@ -25,6 +24,7 @@ forge-std = "1.14.0"
 "@openzeppelin-confidential-contracts" = { version = "6edd293", git = "https://github.com/OpenZeppelin/openzeppelin-confidential-contracts.git", rev = "6edd293" }
 "@encrypted-types" = "0.0.4"
 "@fhevm-solidity" = "0.11.1"
+forge-fhevm = { version = "eba2324", git = "https://github.com/zama-ai/forge-fhevm.git", rev = "eba2324" }
 
 [soldeer]
 remappings_version = false
