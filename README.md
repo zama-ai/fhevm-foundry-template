@@ -6,7 +6,7 @@ FHEVM protocol by Zama.
 ## Quick Start
 
 For detailed instructions see:
-[FHEVM Foundry Quick Start Tutorial](https://docs.zama.ai/protocol/solidity-guides/getting-started/quick-start-tutorial)
+[FHEVM Quick Start Tutorial](https://docs.zama.org/protocol/solidity-guides/getting-started/quick-start-tutorial)
 
 ### Prerequisites
 
@@ -81,9 +81,8 @@ fhevm-foundry-template/
 
 ## Documentation
 
-- [FHEVM Documentation](https://docs.zama.ai/fhevm)
-- [FHEVM Foundry Setup Guide](https://docs.zama.ai/protocol/solidity-guides/getting-started/setup)
-- [FHEVM Testing Guide](https://docs.zama.ai/protocol/solidity-guides/development-guide/foundry/write_test)
+- [FHEVM Documentation](https://docs.zama.org/fhevm)
+- [FHEVM Quick Start Tutorial](https://docs.zama.org/protocol/solidity-guides/getting-started/quick-start-tutorial)
 - [forge-fhevm Documentation](../forge-fhevm/docs/)
 
 ## License
@@ -93,5 +92,5 @@ This project is licensed under the BSD-3-Clause-Clear License. See the [LICENSE]
 ## Support
 
 - **GitHub Issues**: [Report bugs or request features](https://github.com/zama-ai/fhevm/issues)
-- **Documentation**: [FHEVM Docs](https://docs.zama.ai)
+- **Documentation**: [FHEVM Docs](https://docs.zama.org)
 - **Community**: [Zama Discord](https://discord.gg/zama)
