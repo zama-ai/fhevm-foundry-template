@@ -24,6 +24,12 @@ FHEVM protocol by Zama.
    forge test -vvv
    ```
 
+   > **Note:** `forge test` runs against `forge-fhevm`'s in-memory mock of the
+   > FHEVM host contracts (mock KMS / input signers, plaintext database). Tests
+   > execute locally only — they do **not** run against Sepolia or any live
+   > FHEVM deployment. To exercise a contract on Sepolia, deploy it (step 4)
+   > and interact with it through the relayer SDK.
+
 3. **Deploy to local network**
 
    Start an Anvil node with the FHEVM host contracts deployed (requires [forge-fhevm](../forge-fhevm)):
