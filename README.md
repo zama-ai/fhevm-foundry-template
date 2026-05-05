@@ -83,7 +83,7 @@ fhevm-foundry-template/
 
 - [FHEVM Documentation](https://docs.zama.org/fhevm)
 - [FHEVM Quick Start Tutorial](https://docs.zama.org/protocol/solidity-guides/getting-started/quick-start-tutorial)
-- [forge-fhevm Documentation](../forge-fhevm/docs/)
+- [forge-fhevm Documentation](https://github.com/zama-ai/forge-fhevm/tree/main/docs)
 
 ## License
 
