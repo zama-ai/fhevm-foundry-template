@@ -5,9 +5,6 @@ FHEVM protocol by Zama.
 
 ## Quick Start
 
-For detailed instructions see:
-[FHEVM Quick Start Tutorial](https://docs.zama.org/protocol/solidity-guides/getting-started/quick-start-tutorial)
-
 ### Prerequisites
 
 - **Foundry**: [Installation guide](https://book.getfoundry.sh/getting-started/installation)
