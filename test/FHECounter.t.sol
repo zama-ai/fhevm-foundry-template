@@ -8,14 +8,19 @@ import {euint32, externalEuint32} from "encrypted-types/EncryptedTypes.sol";
 contract FHECounterTest is FhevmTest {
     FHECounter counter;
     address counterAddress;
-    uint256 internal constant ALICE_PK = 0xA11CE;
-    address alice;
+    Account alice;
 
     function setUp() public override {
         super.setUp();
         counter = new FHECounter();
         counterAddress = address(counter);
-        alice = vm.addr(ALICE_PK);
+        alice = makeAccount("alice");
+    }
+
+    /// @dev Signs the user-decrypt request with `userPk` and decrypts `handle` in one step.
+    function userDecryptAs(uint256 userPk, bytes32 handle, address contractAddress) internal returns (uint256) {
+        bytes memory sig = signUserDecrypt(userPk, contractAddress);
+        return userDecrypt(handle, vm.addr(userPk), contractAddress, sig);
     }
 
     function test_encryptedCountShouldBeUninitializedAfterDeployment() public view {
@@ -31,14 +36,13 @@ contract FHECounterTest is FhevmTest {
 
         // Encrypt constant 1 as a euint32
         uint32 clearOne = 1;
-        (externalEuint32 encryptedOne, bytes memory inputProof) = encryptUint32(clearOne, alice, counterAddress);
+        (externalEuint32 encryptedOne, bytes memory inputProof) = encryptUint32(clearOne, alice.addr, counterAddress);
 
-        vm.prank(alice);
+        vm.prank(alice.addr);
         counter.increment(encryptedOne, inputProof);
 
         euint32 encryptedCountAfterInc = counter.getCount();
-        bytes memory sig = signUserDecrypt(ALICE_PK, counterAddress);
-        uint256 clearCountAfterInc = userDecrypt(euint32.unwrap(encryptedCountAfterInc), alice, counterAddress, sig);
+        uint256 clearCountAfterInc = userDecryptAs(alice.key, euint32.unwrap(encryptedCountAfterInc), counterAddress);
 
         assertEq(clearCountAfterInc, clearCountBeforeInc + clearOne);
     }
@@ -46,20 +50,20 @@ contract FHECounterTest is FhevmTest {
     function test_decrementTheCounterByOne() public {
         // Encrypt constant 1 as a euint32
         uint32 clearOne = 1;
-        (externalEuint32 encryptedOne, bytes memory inputProof) = encryptUint32(clearOne, alice, counterAddress);
+        (externalEuint32 encryptedOne, bytes memory inputProof) = encryptUint32(clearOne, alice.addr, counterAddress);
 
         // First increment by 1, count becomes 1
-        vm.prank(alice);
+        vm.prank(alice.addr);
         counter.increment(encryptedOne, inputProof);
 
         // Then decrement by 1, count goes back to 0
-        (externalEuint32 encryptedOneDec, bytes memory inputProofDec) = encryptUint32(clearOne, alice, counterAddress);
-        vm.prank(alice);
+        (externalEuint32 encryptedOneDec, bytes memory inputProofDec) =
+            encryptUint32(clearOne, alice.addr, counterAddress);
+        vm.prank(alice.addr);
         counter.decrement(encryptedOneDec, inputProofDec);
 
         euint32 encryptedCountAfterDec = counter.getCount();
-        bytes memory sig = signUserDecrypt(ALICE_PK, counterAddress);
-        uint256 clearCountAfterDec = userDecrypt(euint32.unwrap(encryptedCountAfterDec), alice, counterAddress, sig);
+        uint256 clearCountAfterDec = userDecryptAs(alice.key, euint32.unwrap(encryptedCountAfterDec), counterAddress);
 
         assertEq(clearCountAfterDec, 0);
     }
