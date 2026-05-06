@@ -39,6 +39,8 @@ FHEVM protocol by Zama.
    forge script script/DeployFHECounter.s.sol --rpc-url http://localhost:8545 --broadcast
    ```
 
+---
+
 > [!WARNING]
 > 🚧 **Tests and scripts run only against the local FHEVM mock — never against Sepolia or any live FHEVM deployment.**
 >
@@ -52,7 +54,7 @@ FHEVM protocol by Zama.
 > forge script script/SomeFHEScript.s.sol --rpc-url http://sepolia --broadcast
 > ```
 >
-> To exercise a contract on Sepolia, deploy it (step 4 below) and interact through the relayer SDK from your dApp.
+> To interact with a contract on Sepolia, deploy it (step 4 below) and interact through the [Zama SDK](https://github.com/zama-ai/sdk) from your dApp.
 
 4. **Deploy to Sepolia Testnet**
 
