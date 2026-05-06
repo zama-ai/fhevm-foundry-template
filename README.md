@@ -24,12 +24,6 @@ FHEVM protocol by Zama.
    forge test -vvv
    ```
 
-   > **Note:** `forge test` runs against `forge-fhevm`'s in-memory mock of the
-   > FHEVM host contracts (mock KMS / input signers, plaintext database). Tests
-   > execute locally only — they do **not** run against Sepolia or any live
-   > FHEVM deployment. To exercise a contract on Sepolia, deploy it (step 4)
-   > and interact with it through the relayer SDK.
-
 3. **Deploy to local network**
 
    Start an Anvil node with the FHEVM host contracts deployed (requires [forge-fhevm](../forge-fhevm)):
@@ -44,6 +38,23 @@ FHEVM protocol by Zama.
    ```bash
    forge script script/DeployFHECounter.s.sol --rpc-url http://localhost:8545 --broadcast
    ```
+
+---
+
+> [!WARNING]
+> 🚧 **Tests and scripts run only against the local FHEVM mock — never against Sepolia or any live FHEVM deployment.**
+>
+> `forge test` (and any script that depends on FHE decryption) relies on `forge-fhevm`'s in-memory mock of the FHEVM host contracts — mock KMS / input signers, plaintext database. Those mocks do not exist on a live network, so pointing tests or test-style scripts at Sepolia will fail:
+>
+> ```bash
+> # ❌ FAIL — no mock host contracts on Sepolia
+> forge test --rpc-url http://sepolia --broadcast
+>
+> # ❌ FAIL — encrypted state on a live network can't be decrypted in-process
+> forge script script/SomeFHEScript.s.sol --rpc-url http://sepolia --broadcast
+> ```
+>
+> To interact with a contract on Sepolia, deploy it (step 4 below) and interact through the [Zama SDK](https://github.com/zama-ai/sdk) from your dApp.
 
 4. **Deploy to Sepolia Testnet**
 
