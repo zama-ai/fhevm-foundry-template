@@ -26,17 +26,23 @@ FHEVM protocol by Zama.
 
 3. **Deploy to local network**
 
-   Start an Anvil node with the FHEVM host contracts deployed (requires [forge-fhevm](../forge-fhevm)):
+   Start an Anvil node (a `hardhat node` works too), then stand the FHEVM host stack up on it —
+   straight from this project; the deployment logic lives in
+   [`@fhevm/host-contracts-cleartext`](../sdk/host-contracts-cleartext), the package that owns FHEVM
+   deployment for every target:
 
    ```bash
-   # From the forge-fhevm directory
-   ./deploy-local.sh
+   anvil
+
+   # In another terminal — no --broadcast and no key; the node's cheat codes do the placement:
+   forge script script/DeployFhevmStack.s.sol --rpc-url http://localhost:8545
    ```
 
-   Then deploy to the local network:
+   Then deploy your contracts to it (the private key below is Anvil's funded account #0):
 
    ```bash
-   forge script script/DeployFHECounter.s.sol --rpc-url http://localhost:8545 --broadcast
+   forge script script/DeployFHECounter.s.sol --rpc-url http://localhost:8545 \
+       --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 --broadcast
    ```
 
 ---
@@ -97,7 +103,7 @@ fhevm-foundry-template/
 
 - [FHEVM Documentation](https://docs.zama.org/fhevm)
 - [FHEVM Quick Start Tutorial](https://docs.zama.org/protocol/solidity-guides/getting-started/quick-start-tutorial)
-- [forge-fhevm Documentation](https://github.com/zama-ai/forge-fhevm/tree/main/docs)
+- [forge-fhevm](../sdk/forge-fhevm) — the Foundry testing library this template uses
 
 ## License
 
